@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102a43">
+<title>Cricket Pro Dashboard</title>
+<style>
+:root{--ink:#172b4d;--muted:#62748a;--line:#dce5ef;--bg:#f3f7fb;--card:#fff;--green:#087f5b;--green2:#12a879;--blue:#2563eb;--red:#c62828;--shadow:0 12px 32px #183b5b0c}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#edf6f3 0,#f4f7fb 270px);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
+.wrap{max-width:1120px;margin:auto;padding:18px}
+.hero{background:linear-gradient(120deg,#103c35,#087f5b 58%,#159b83);color:#fff;padding:23px;border-radius:22px;box-shadow:0 14px 34px #087f5b25}
+.kicker{font-size:.76rem;font-weight:800;letter-spacing:.13em;color:#b9f3dc}.hero h1{margin:5px 0;font-size:clamp(1.5rem,4vw,2.2rem)}.hero p{margin:0;color:#e0fff2;line-height:1.6}
+.toolbar{display:grid;grid-template-columns:minmax(145px,.75fr) minmax(240px,2fr);gap:12px;margin:14px 0}
+.datebox,.searchbox,.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.datebox,.searchbox{padding:12px 14px}.datebox label,.searchbox label,.field label{display:block;font-size:.84rem;font-weight:750;margin-bottom:6px;color:#40536a}
+input,select,textarea{width:100%;border:1px solid #cbd7e5;border-radius:10px;padding:11px 12px;font:inherit;color:var(--ink);background:#fff;min-width:0}
+input:focus,select:focus,textarea:focus{outline:3px solid #12a87925;border-color:#12a879}textarea{resize:vertical;min-height:72px}
+.panel{padding:18px;margin:14px 0}.panelhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}.panel h2{font-size:1.12rem;margin:0}.sub{color:var(--muted);font-size:.88rem;line-height:1.55;margin:6px 0 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field.full{grid-column:1/-1}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}
+button{font:inherit;font-weight:750;border:0;border-radius:10px;padding:10px 14px;cursor:pointer;background:var(--green);color:#fff}button:hover{filter:brightness(.97)}button:disabled{opacity:.35;cursor:not-allowed}button.secondary{background:#eaf1f6;color:#2c4259}button.danger{background:#ffebeb;color:#b4232c}button.small{padding:7px 10px;font-size:.84rem}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tab{background:#e6eee9;color:#315448}.tab.active{background:#087f5b;color:#fff}
+.results{display:grid;gap:10px}.item{border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(135deg,#fff,#fbfdff);overflow-wrap:anywhere}.itemtop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}.itemtitle{font-weight:850;font-size:1.02rem}.meta{font-size:.86rem;color:var(--muted);line-height:1.7;margin-top:5px}.meta .meta-date{color:#2563eb;font-weight:800}.meta .meta-ground{color:#087f5b;font-weight:800}.meta .meta-pitch{color:#b45309;font-weight:800}.meta .meta-format{color:#7c3aed;font-weight:800}.meta .meta-teams{color:#be185d;font-weight:800}.meta .meta-toss{color:#0f766e;font-weight:800}.meta .meta-label{font-weight:800;color:#475569}.detail{line-height:1.7;margin-top:7px}.pill{display:inline-block;border-radius:999px;background:#e4f7ee;color:#08734f;font-weight:800;font-size:.78rem;padding:4px 9px}.pill.loss{background:#ffebeb;color:#c62828}.pill.neutral{background:#edf2f7;color:#4b6076}
+.count{font-size:.85rem;color:var(--muted);margin:10px 0}.empty{padding:20px;text-align:center;color:var(--muted);border:1px dashed #cbd7e5;border-radius:12px}
+.teams{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.teamcard{border:1px solid #cfe5db;border-radius:14px;padding:14px;background:linear-gradient(135deg,#f4fff9,#fff)}.teamcard h3{margin:0 0 8px;font-size:1rem}.teamcard.winner{border:2px solid #0c9a69;box-shadow:0 0 0 3px #0c9a6910}.teamplayers{display:grid;gap:7px;margin-top:10px}.playerline{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:10px;border:1px solid #e1e9ef;border-radius:10px;background:#fff}.playerline .info{min-width:0}.muted{font-size:.85rem;color:var(--muted);line-height:1.55}
+.team-tick{display:flex;gap:5px;align-items:center;font-size:.82rem;font-weight:800;color:#087f5b;white-space:nowrap}.hidden{display:none!important}footer{text-align:center;color:var(--muted);font-size:.82rem;padding:12px 0 22px}
+@media(max-width:620px){.wrap{padding:12px}.toolbar,.grid,.teams{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{padding:19px}.panel{padding:14px}.datebox,.searchbox{padding:11px}}
+</style>
+</head>
+<body><main class="wrap">
+<header class="hero"><div class="kicker">PERSONAL CRICKET WORKSPACE</div><h1>🏏 Cricket Pro Dashboard</h1><p>টিম নির্বাচন ও প্লেয়ার লাইব্রেরি</p></header>
+
+<div class="tabs">
+<button class="tab active" data-view="players">প্লেয়ার লাইব্রেরি ও টিম বিল্ডার</button><button class="tab" data-view="matches">ম্যাচ স্ট্যাটস</button>
+</div>
+
+
+
+<section class="panel" id="teamPanel">
+  <div class="panelhead"><div><h2>🧢 টিম বিল্ডার</h2></div></div>
+  <div class="field"><label for="builderToss">🏆 টস জিতেছে কোন দল?</label><select id="builderToss"><option value="team1">দল ১</option><option value="team2">দল ২</option></select></div>
+  <div class="teams" id="teamsView" style="margin-top:14px"></div>
+</section>
+
+<section class="panel" id="playerPanel">
+ <div class="panelhead"><div><h2>👤 প্লেয়ার লাইব্রেরি</h2><p class="sub">প্লেয়ার সেভ করার পর ডান পাশের টিক দিয়ে দল ১ বা দল ২-এ নির্বাচন করুন।</p></div></div>
+ <form id="playerForm"><input type="hidden" id="playerEditId">
+  <div class="grid">
+   <div class="field"><label for="playerName">খেলোয়াড়ের নাম *</label><input id="playerName" required placeholder="যেমন: Shakib Al Hasan"></div>
+   <div class="field"><label for="playerCountry">দেশ বা দল</label><input id="playerCountry" placeholder="যেমন: Bangladesh"></div>
+   <div class="field"><label for="playerRole">ভূমিকা</label><select id="playerRole"><option>ব্যাটার</option><option>বোলার</option><option>অলরাউন্ডার</option><option>উইকেটকিপার</option><option>অন্যান্য</option></select></div>
+   <div class="field"><label for="playerNotes">নিজের নোট</label><textarea id="playerNotes" placeholder="নিজের জন্য নোট লিখুন"></textarea></div>
+  </div><div class="actions"><button type="submit" id="playerSave">প্লেয়ার সেভ করুন</button><button type="button" class="secondary" id="playerClear">ফর্ম খালি করুন</button></div>
+ </form>
+ <div class="field" style="margin-top:16px"><label for="playerSearch">🔎 প্লেয়ার সার্চ</label><input id="playerSearch" placeholder="প্লেয়ারের নাম, দেশ/দল বা ভূমিকা লিখুন…"></div>
+ <div id="playerLibraryList" class="results" style="margin-top:12px"></div>
+</section>
+
+<section class="panel hidden" id="matchPanel">
+ <form id="matchForm"><input type="hidden" id="matchEditId">
+  <div class="grid">
+   <div class="field"><label for="matchDate">তারিখ *</label><input id="matchDate" type="date" required></div>
+   <div class="field"><label for="ground">গ্রাউন্ড ও ভেন্যু *</label><input id="ground" required placeholder="যেমন: মিরপুর"></div>
+   <div class="field"><label for="pitch">পিচ টাইপ</label><input id="pitch" placeholder="যেমন: স্পিন সহায়ক"></div>
+   <div class="field"><label for="matchFormat">ম্যাচের ধরন</label><select id="matchFormat"><option value="">বেছে নিন</option><option>T20</option><option>ODI</option><option>Test</option><option>T10</option><option>অন্যান্য</option></select></div>
+   <div class="field"><label for="teamA">দল ১-এর নাম *</label><input id="teamA" required placeholder="যেমন: Bangladesh"></div>
+   <div class="field"><label for="teamB">দল ২-এর নাম *</label><input id="teamB" required placeholder="যেমন: India"></div>
+   <div class="field"><label for="odds">টোটাল অডস</label><input id="odds" inputmode="decimal" placeholder="যেমন: 1.85"></div>
+   <div class="field"><label for="result">ফলাফল</label><select id="result"><option value="">ফলাফল বেছে নিন</option><option value="W">W — Win</option><option value="L">L — Loss</option></select></div>
+   <div class="field full"><label for="reason">কেন এন্ট্রি নিলাম?</label><textarea id="reason" placeholder="এন্ট্রি নেওয়ার কারণ লিখুন"></textarea></div>
+  </div>
+  <div class="actions"><button type="submit" id="matchSave">ম্যাচ সেভ করুন</button><button type="button" class="secondary" id="matchClear">ফর্ম খালি করুন</button></div>
+ </form>
+</section>
+
+
+
+<section class="panel hidden" id="resultsPanel">
+ <div class="grid">
+  <div class="field full"><label for="searchAny">ম্যাচ খুঁজুন</label><input id="searchAny" placeholder="গ্রাউন্ড, দল বা পিচ টাইপ লিখুন… (যেমন: মিরপুর স্পিন সহায়ক)"></div>
+ </div>
+ <div id="resultCount" class="count"></div><div id="results" class="results"></div>
+</section>
+
+<section class="panel">
+ <div class="panelhead"><div><h2>💾 ব্যাকআপ ও ডেটা</h2><p class="sub">Google Drive সংযোগ করলে সেভ করা তথ্য অনলাইনে ব্যাকআপ হবে। একই Google অ্যাকাউন্টে অন্য ফোন থেকেও ফিরিয়ে আনা যাবে।</p></div></div>
+ <div class="actions"><button id="driveConnectBtn" type="button">Google Drive সংযোগ করুন</button><button id="driveBackupBtn" type="button" class="secondary">এখনই অনলাইন ব্যাকআপ</button><button id="driveRestoreBtn" type="button" class="secondary">অনলাইন ব্যাকআপ ফিরিয়ে আনুন</button><button id="driveDownloadBtn" type="button" class="secondary">Google Drive ব্যাকআপ ফাইল ডাউনলোড</button></div>
+ <p id="driveInfo" class="muted">অনলাইন ব্যাকআপ চালু করতে নিজের Google Cloud OAuth Client ID লাগবে। ফাইলটি HTTPS ওয়েবসাইটে চালু করে সেই ওয়েবসাইটের origin Google Cloud-এ অনুমোদন করতে হবে।</p>
+ <div class="actions"><button id="backupBtn">সব ডেটা ব্যাকআপ ডাউনলোড</button><button class="secondary" id="restoreBtn">ব্যাকআপ ফিরিয়ে আনুন</button><input type="file" id="restoreFile" accept="application/json,.json" class="hidden"><button class="danger" id="deleteAllBtn">সব ডেটা মুছুন</button></div>
+ <p id="status" class="muted" role="status"></p>
+</section>
+<footer>Cricket Pro Dashboard · আপনার ডেটা এই ব্রাউজারেই থাকে। ব্রাউজার ডেটা মুছে গেলে হারাতে পারে।</footer>
+</main>
+<script>
+(()=>{'use strict';
+const STORE='cricketProDashboard_v1';
+const DRIVE_CLIENT_KEY='cricketProDriveClientId';
+// পুরোনো Google OAuth Client ID সরিয়ে দিন; নতুন প্রজেক্টের ID দিতে হবে।
+try{localStorage.removeItem(DRIVE_CLIENT_KEY)}catch(e){}
+const DRIVE_FILE_NAME='cricket-pro-dashboard-backup.json';
+let driveToken='', driveTokenClient=null, driveFileId='';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let db={players:[],matches:[],team1:[],team2:[],team1name:'',team2name:'',builderToss:'team1'};
+try{const old=JSON.parse(localStorage.getItem(STORE)||'null');if(old&&typeof old==='object')db={...db,...old,players:Array.isArray(old.players)?old.players:[],matches:Array.isArray(old.matches)?old.matches:[],team1:Array.isArray(old.team1)?old.team1:[],team2:Array.isArray(old.team2)?old.team2:[]}}catch(e){}
+function status(s){$('status').textContent=s}
+function persist(){try{localStorage.setItem(STORE,JSON.stringify(db));status('সেভ হয়েছে।');if(driveToken)driveUpload(true).catch(()=>driveInfo('অনলাইন ব্যাকআপ হয়নি—Google Drive আবার সংযোগ করুন।'));}catch(e){status('ব্রাউজারে সেভ করা যায়নি। ব্যাকআপ ডাউনলোড করুন।')}}
+function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+$('matchDate').value=today();
+function resetPlayer(){$('playerForm').reset();$('playerEditId').value='';$('playerSave').textContent='প্লেয়ার সেভ করুন'}
+function resetMatch(){$('matchForm').reset();$('matchEditId').value='';$('matchDate').value=today();$('matchSave').textContent='ম্যাচ সেভ করুন'}
+$('playerForm').addEventListener('submit',e=>{e.preventDefault();const name=$('playerName').value.trim();if(!name)return;const id=$('playerEditId').value||('p'+Date.now()+Math.random().toString(36).slice(2,6));const p={id,name,country:$('playerCountry').value.trim(),role:$('playerRole').value,notes:$('playerNotes').value.trim()};const i=db.players.findIndex(x=>x.id===id);if(i>=0)db.players[i]=p;else db.players.push(p);persist();resetPlayer();render()});
+$('playerClear').addEventListener('click',resetPlayer);
+$('matchForm').addEventListener('submit',e=>{e.preventDefault();const id=$('matchEditId').value||('m'+Date.now()+Math.random().toString(36).slice(2,6));const m={id,date:$('matchDate').value,ground:$('ground').value.trim(),pitch:$('pitch').value.trim(),format:$('matchFormat').value,teamA:$('teamA').value.trim(),teamB:$('teamB').value.trim(),odds:$('odds').value.trim(),result:$('result').value,reason:$('reason').value.trim()};const i=db.matches.findIndex(x=>x.id===id);if(i>=0)db.matches[i]=m;else db.matches.push(m);persist();resetMatch();render()});
+$('matchClear').addEventListener('click',resetMatch);
+function editPlayer(id){const p=db.players.find(x=>x.id===id);if(!p)return;$('playerEditId').value=id;$('playerName').value=p.name||'';$('playerCountry').value=p.country||'';$('playerRole').value=p.role||'ব্যাটার';$('playerNotes').value=p.notes||'';$('playerSave').textContent='পরিবর্তন সেভ করুন';$('playerPanel').scrollIntoView({behavior:'smooth'})}
+function editMatch(id){const m=db.matches.find(x=>x.id===id);if(!m)return;Object.entries({matchDate:m.date,ground:m.ground,pitch:m.pitch,matchFormat:m.format,teamA:m.teamA,teamB:m.teamB,odds:m.odds,result:m.result,reason:m.reason,matchEditId:m.id}).forEach(([k,v])=>$(k).value=v||'');$('matchSave').textContent='পরিবর্তন সেভ করুন';$('matchPanel').scrollIntoView({behavior:'smooth'})}
+function deletePlayer(id){if(!confirm('এই প্লেয়ার এবং দুই টিম থেকে তাকে বাদ দেবেন?'))return;db.players=db.players.filter(p=>p.id!==id);db.team1=db.team1.filter(x=>x!==id);db.team2=db.team2.filter(x=>x!==id);persist();render()}
+function addToTeam(id,team){if(!id)return;const arr=db[team];if(arr.includes(id)){status('এই প্লেয়ার ইতিমধ্যেই এই দলে আছে।');return}if(arr.length>=11){status('একটি দলে সর্বোচ্চ ১১ জন রাখা যাবে।');return}arr.push(id);persist();render()}
+function removeFromTeam(id,team){db[team]=db[team].filter(x=>x!==id);persist();render()}
+function renderTeams(){const winner=$('builderToss').value||'team1';const order=winner==='team2'?['team2','team1']:['team1','team2'];$('teamsView').innerHTML=order.map(t=>{const name=t==='team1'?'দল ১':'দল ২',arr=db[t];return `<div class="teamcard ${t===winner?'winner':''}"><h3>${name} <span class="pill">${arr.length}/11</span> ${t===winner?'<span class="pill">টস জয়ী</span>':''}</h3><div class="teamplayers">${arr.length?arr.map((id,i)=>{const p=db.players.find(x=>x.id===id);if(!p)return '';return `<div class="playerline"><div class="info"><b>${i+1}. ${esc(p.name)}</b><div class="muted">${esc(p.country||'')} ${p.role?'· '+esc(p.role):''}</div></div><div class="actions" style="margin-top:0;justify-content:flex-end;align-items:center"><button type="button" class="small secondary" data-team-move="${t}" data-id="${esc(id)}" data-direction="-1" ${i===0?'disabled':''} aria-label="উপরে নিন">↑</button><button type="button" class="small secondary" data-team-move="${t}" data-id="${esc(id)}" data-direction="1" ${i===arr.length-1?'disabled':''} aria-label="নিচে নিন">↓</button><button type="button" class="small danger" data-team-remove="${t}" data-id="${esc(id)}">বাদ</button></div></div>`}).join(''):'<div class="empty">এখনও প্লেয়ার যোগ করা হয়নি।</div>'}</div><div class="actions"><button class="secondary" data-team-clear="${t}">দল খালি করুন</button></div></div>`}).join('')}
+function renderLibrary(){const q=$('playerSearch').value.trim().toLocaleLowerCase();const ps=db.players.filter(p=>Object.values(p).join(' ').toLocaleLowerCase().includes(q)).sort((a,b)=>a.name.localeCompare(b.name));$('playerLibraryList').innerHTML=ps.length?ps.map(p=>{const in1=db.team1.includes(p.id),in2=db.team2.includes(p.id);return `<article class="item"><div class="itemtop"><div><div class="itemtitle">${esc(p.name)}</div><div class="meta">দেশ / দল: ${esc(p.country||'—')} · ভূমিকা: ${esc(p.role||'—')}</div>${p.notes?`<div class="detail">${esc(p.notes)}</div>`:''}</div><div class="actions" style="margin-top:0;align-items:center"><label class="team-tick"><input type="checkbox" data-team-tick="team1" data-id="${esc(p.id)}" ${in1?'checked':''} style="width:auto"> দল ১</label><label class="team-tick"><input type="checkbox" data-team-tick="team2" data-id="${esc(p.id)}" ${in2?'checked':''} style="width:auto"> দল ২</label><button class="small secondary" data-edit-player="${esc(p.id)}">এডিট</button><button class="small danger" data-delete-player="${esc(p.id)}">মুছুন</button></div></div></article>`}).join(''):'<div class="empty">কোনো প্লেয়ার পাওয়া যায়নি।</div>'}
+function renderResults(){const q=$('searchAny').value.trim().toLocaleLowerCase();const terms=q.split(/\\s+/).filter(Boolean);const ms=db.matches.filter(m=>{const fields=[m.ground,m.teamA,m.teamB,m.pitch,m.format].map(x=>(x||'').toLocaleLowerCase());return !q||fields.join(' ').includes(q)||terms.every(term=>fields.some(x=>x.includes(term)));}).sort((x,y)=>(y.date||'').localeCompare(x.date||''));$('resultCount').textContent=`ম্যাচ রেজাল্ট: ${ms.length}টি`;$('results').innerHTML=ms.length?ms.map(m=>`<article class="item"><div class="itemtop"><div class="itemtitle">${esc(m.teamA||'দল ১')} বনাম ${esc(m.teamB||'দল ২')}</div><span class="pill ${m.result==='L'?'loss':m.result==='W'?'':'neutral'}">${m.result==='W'?'W — Win':m.result==='L'?'L — Loss':esc(m.format||'ম্যাচ')}</span></div><div class="meta"><span class="meta-date">📅 ${esc(m.date||'—')}</span> · <span class="meta-ground">📍 ${esc(m.ground||'—')}</span> · <span class="meta-pitch">পিচ: ${esc(m.pitch||'—')}</span> · <span class="meta-format">ধরন: ${esc(m.format||'—')}</span></div><div class="detail"><span class="meta-teams">${esc(m.teamA||'—')} বনাম ${esc(m.teamB||'—')}</span> · <span class="meta-label">অডস:</span> ${esc(m.odds||'—')}</div>${m.reason?`<div class="detail"><b>কেন এন্ট্রি নিলাম?</b> ${esc(m.reason)}</div>`:''}<div class="actions"><button class="small secondary" data-edit-match="${esc(m.id)}">এডিট</button><button class="small danger" data-delete-match="${esc(m.id)}">মুছুন</button></div></article>`).join(''):'<div class="empty">এই গ্রাউন্ড ও দল অনুযায়ী কোনো ম্যাচ পাওয়া যায়নি।</div>'}
+function render(){renderTeams();renderLibrary();renderResults()}
+$('playerSearch').addEventListener('input',renderLibrary);
+$('searchAny').addEventListener('input',renderResults);
+$('builderToss').addEventListener('change',()=>{db.builderToss=$('builderToss').value;persist();renderTeams()});
+document.querySelectorAll('[data-view]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-view]').forEach(x=>x.classList.toggle('active',x===btn));const matches=btn.dataset.view==='matches';$('teamPanel').classList.toggle('hidden',matches);$('playerPanel').classList.toggle('hidden',matches);$('matchPanel').classList.toggle('hidden',!matches);$('resultsPanel').classList.toggle('hidden',!matches)}));
+document.addEventListener('change',e=>{const t=e.target.closest('[data-team-tick]');if(!t)return;const id=t.dataset.id,team=t.dataset.teamTick;if(t.checked)addToTeam(id,team);else removeFromTeam(id,team)});
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const id=b.dataset.id;if(b.dataset.editPlayer)editPlayer(b.dataset.editPlayer);if(b.dataset.deletePlayer)deletePlayer(b.dataset.deletePlayer);if(b.dataset.editMatch)editMatch(b.dataset.editMatch);if(b.dataset.deleteMatch&&confirm('এই ম্যাচের তথ্য মুছবেন?')){db.matches=db.matches.filter(m=>m.id!==b.dataset.deleteMatch);persist();renderResults()}if(b.dataset.teamMove){const team=b.dataset.teamMove,arr=db[team],idx=arr.indexOf(id),next=idx+Number(b.dataset.direction);if(idx>=0&&next>=0&&next<arr.length){[arr[idx],arr[next]]=[arr[next],arr[idx]];persist();renderTeams()}}if(b.dataset.teamRemove)removeFromTeam(id,b.dataset.teamRemove);if(b.dataset.teamClear&&confirm('এই দলের সব প্লেয়ার বাদ দেবেন?')){db[b.dataset.teamClear]=[];persist();render()}});
+function driveInfo(s){$('driveInfo').textContent=s}
+function loadGoogleScript(){return new Promise((resolve,reject)=>{if(window.google&&google.accounts&&google.accounts.oauth2){resolve();return}const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.onload=resolve;sc.onerror=()=>reject(new Error('Google sign-in script লোড হয়নি'));document.head.appendChild(sc)})}
+async function setupDrive(){let clientId=prompt('নতুন Google Cloud প্রজেক্টের OAuth Client ID দিন। Google Cloud Console → APIs & Services → Credentials → Create Credentials → OAuth client ID → Web application থেকে Client ID নিন।');if(!clientId){driveInfo('সংযোগ বাতিল হয়েছে। নতুন OAuth Client ID না দিলে Google Drive সংযোগ হবে না।');return}clientId=clientId.trim().replace(/^https?:\/\//i,'');if(!clientId){driveInfo('সঠিক OAuth Client ID দিন।');return}localStorage.setItem(DRIVE_CLIENT_KEY,clientId);await loadGoogleScript();driveTokenClient=google.accounts.oauth2.initTokenClient({client_id:clientId,scope:'https://www.googleapis.com/auth/drive.appdata',callback:async(resp)=>{if(resp.error){driveInfo('Google Drive সংযোগ হয়নি: '+resp.error);return}driveToken=resp.access_token;driveFileId='';driveInfo('Google Drive সংযুক্ত। এই অ্যাকাউন্টে সেভ হলেই অনলাইন ব্যাকআপ হবে।');try{await driveUpload(false)}catch(e){driveInfo('সংযোগ হয়েছে, কিন্তু ব্যাকআপ ব্যর্থ: '+e.message)}}});driveTokenClient.requestAccessToken({prompt:'select_account'})}
+async function driveUpload(silent){if(!driveToken){if(!silent)driveInfo('আগে Google Drive সংযোগ করুন।');return}const data=JSON.stringify(db);const headers={'Authorization':'Bearer '+driveToken};if(!driveFileId){const q=await fetch("https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name%3D%27"+encodeURIComponent(DRIVE_FILE_NAME)+"%27&fields=files(id,name)",{headers});if(!q.ok)throw new Error('Drive ফাইল খোঁজা যায়নি ('+q.status+')');const j=await q.json();if(j.files&&j.files.length)driveFileId=j.files[0].id}const meta=driveFileId?{name:DRIVE_FILE_NAME}:{name:DRIVE_FILE_NAME,parents:['appDataFolder']};const boundary='cricket_boundary_'+Date.now();const body='--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+'\r\n--'+boundary+'\r\nContent-Type: application/json\r\n\r\n'+data+'\r\n--'+boundary+'--';const url=driveFileId?'https://www.googleapis.com/upload/drive/v3/files/'+driveFileId+'?uploadType=multipart&fields=id':'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id';const r=await fetch(url,{method:driveFileId?'PATCH':'POST',headers:{...headers,'Content-Type':'multipart/related; boundary='+boundary},body});if(!r.ok)throw new Error('Drive আপলোড ব্যর্থ ('+r.status+')');const result=await r.json();driveFileId=result.id||driveFileId;driveInfo('সর্বশেষ অনলাইন ব্যাকআপ সফল হয়েছে।');if(!silent)status('Google Drive-এ ব্যাকআপ সেভ হয়েছে।')}
+async function driveRestore(){if(!driveToken){driveInfo('আগে Google Drive সংযোগ করুন।');return}const q=await fetch("https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name%3D%27"+encodeURIComponent(DRIVE_FILE_NAME)+"%27&fields=files(id,name,modifiedTime)&orderBy=modifiedTime%20desc&pageSize=1",{headers:{Authorization:'Bearer '+driveToken}});if(!q.ok)throw new Error('Drive থেকে খোঁজা যায়নি ('+q.status+')');const j=await q.json();if(!j.files||!j.files.length){driveInfo('এই Google অ্যাকাউন্টে কোনো অনলাইন ব্যাকআপ পাওয়া যায়নি।');return}const f=j.files[0];const r=await fetch('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media',{headers:{Authorization:'Bearer '+driveToken}});if(!r.ok)throw new Error('ব্যাকআপ ডাউনলোড ব্যর্থ');const x=await r.json();if(!x||!Array.isArray(x.players)||!Array.isArray(x.matches))throw new Error('ব্যাকআপ ফাইল সঠিক নয়');if(confirm('Google Drive-এর ব্যাকআপ দিয়ে এই ডিভাইসের বর্তমান ডেটা বদলে দেবেন?')){db={...db,...x};driveFileId=f.id;localStorage.setItem(STORE,JSON.stringify(db));$('builderToss').value=db.builderToss||'team1';render();driveInfo('অনলাইন ব্যাকআপ ফিরিয়ে আনা হয়েছে।')}}
+$('driveConnectBtn').addEventListener('click',()=>setupDrive().catch(e=>driveInfo('Google Drive সংযোগ করা যায়নি: '+e.message)));
+$('driveBackupBtn').addEventListener('click',()=>driveUpload(false).catch(e=>driveInfo('অনলাইন ব্যাকআপ ব্যর্থ: '+e.message)));
+$('driveRestoreBtn').addEventListener('click',()=>driveRestore().catch(e=>driveInfo('ব্যাকআপ ফিরিয়ে আনা যায়নি: '+e.message)));
+async function driveDownloadBackup(){
+ if(!driveToken){driveInfo('আগে Google Drive সংযোগ করুন।');return}
+ const q=await fetch("https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name%3D%27"+encodeURIComponent(DRIVE_FILE_NAME)+"%27&fields=files(id,name,modifiedTime)&orderBy=modifiedTime%20desc&pageSize=1",{headers:{Authorization:'Bearer '+driveToken}});
+ if(!q.ok)throw new Error('Drive থেকে ব্যাকআপ খোঁজা যায়নি ('+q.status+')');
+ const j=await q.json();
+ if(!j.files||!j.files.length){driveInfo('এই Google অ্যাকাউন্টে এখনো কোনো অনলাইন ব্যাকআপ ফাইল পাওয়া যায়নি।');return}
+ const f=j.files[0];
+ const r=await fetch('https://www.googleapis.com/drive/v3/files/'+f.id+'?alt=media',{headers:{Authorization:'Bearer '+driveToken}});
+ if(!r.ok)throw new Error('ব্যাকআপ ডাউনলোড ব্যর্থ ('+r.status+')');
+ const data=await r.blob();
+ const url=URL.createObjectURL(data);const a=document.createElement('a');a.href=url;a.download=DRIVE_FILE_NAME;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+ driveInfo('Google Drive-এর ব্যাকআপ ফাইল ডাউনলোড শুরু হয়েছে: '+DRIVE_FILE_NAME);
+}
+$('driveDownloadBtn').addEventListener('click',()=>driveDownloadBackup().catch(e=>driveInfo('ব্যাকআপ ফাইল ডাউনলোড হয়নি: '+e.message)));
+
+
+$('backupBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cricket-pro-backup.json';a.click();URL.revokeObjectURL(url);status('ব্যাকআপ ডাউনলোড শুরু হয়েছে।')});
+$('restoreBtn').addEventListener('click',()=>$('restoreFile').click());
+$('restoreFile').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x||!Array.isArray(x.players)||!Array.isArray(x.matches))throw Error('bad');if(confirm('ব্যাকআপের ডেটা বর্তমান ডেটার বদলে ফিরিয়ে আনবেন?')){db={...db,...x};persist();$('builderToss').value=db.builderToss||'team1';render();status('ব্যাকআপ ফিরিয়ে আনা হয়েছে।')}}catch(err){status('সঠিক Cricket Pro JSON ব্যাকআপ ফাইল বেছে নিন।')}e.target.value=''});
+$('deleteAllBtn').addEventListener('click',()=>{if(confirm('সব ম্যাচ, প্লেয়ার ও টিমের ডেটা মুছে ফেলবেন? আগে ব্যাকআপ নিন।')){db={players:[],matches:[],team1:[],team2:[],team1name:'',team2name:'',builderToss:'team1'};persist();resetPlayer();resetMatch();$('builderToss').value='team1';render()}});
+$('builderToss').value=db.builderToss||'team1';render();
+})();
+</script>
+</body></html>
